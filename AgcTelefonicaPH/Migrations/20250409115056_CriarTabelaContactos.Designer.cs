@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgcTelefonicaPH.Migrations
 {
     [DbContext(typeof(BancoContext))]
-    [Migration("20250408170515_CriarTabelaContactos")]
+    [Migration("20250409115056_CriarTabelaContactos")]
     partial class CriarTabelaContactos
     {
         /// <inheritdoc />
