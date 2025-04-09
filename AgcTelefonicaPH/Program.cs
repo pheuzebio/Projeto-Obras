@@ -15,6 +15,7 @@ namespace AgcTelefonicaPH
             builder.Services.AddEntityFrameworkSqlServer()
                 .AddDbContext<BancoContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
             builder.Services.AddScoped<IContactoRepositorio, ContactoRepositorio>();
+            builder.Services.AddScoped<IObraRepositorio, ObraRepositorio>();
 
             var app = builder.Build();
 

@@ -1,39 +1,45 @@
 ﻿@model List<ObraModel>
 @{
-    ViewData["Title"] = "Lista de Contactos";
+    ViewData["Title"] = "Lista de Obras";
 }
-<br />
-<h1 class="display-4">Lista de Contactos</h1>
-<br />
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Descrição</th>
-            <th scope="col">Data de início</th>
-            <th scope="col">Data final</th>
-            <th scope="col">Cliente</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.Any())
-        {
-            foreach (ObraModel obra in Model)
+<div class="text-center">
+
+    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+        <a class="btn btn-primary" role="button" asp-action="CriarObra">Adicionar uma Obra</a>
+    </div>
+    <br />
+    <h1 class="display-4">Lista de Obras</h1>
+    <br />
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Descrição</th>
+                <th scope="col">Data de início</th>
+                <th scope="col">Data final</th>
+                <th scope="col">Cliente</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
             {
-                <tr>
-                    <th scope="row">@obra.id</th>
-                    <td>@obra.Descricao</td>
-                    <td>@obra.DatIni</td>
-                    <td>@obra.DatFim</td>
-                    <td>@obra.idCliente</td>
-                    <td>
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <a role="button" class="btn btn-secondary" asp-route-id="@obra.id" asp-controller="Obra" asp-action="EditarContacto">Editar</a>
-                            <a role="button" class="btn btn-danger" asp-route-id="@obra.id" asp-controller="Contacto" asp-action="ApagarConfirm">Apagar</a>
-                        </div>
-                    </td>
-                </tr>
+                foreach (ObraModel obra in Model)
+                {
+                    <tr>
+                        <th scope="row">@obra.id</th>
+                        <td>@obra.Descricao</td>
+                        <td>@obra.DatIni</td>
+                        <td>@obra.DatFim</td>
+                        <td>@obra.idCliente</td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <a role="button" class="btn btn-secondary" asp-route-id="@obra.id" asp-controller="Obra" asp-action="EditarContacto">Editar</a>
+                                <a role="button" class="btn btn-danger" asp-route-id="@obra.id" asp-controller="Obra" asp-action="ApagarConfirm">Apagar</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
             }
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>

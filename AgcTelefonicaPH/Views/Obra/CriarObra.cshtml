@@ -1,0 +1,47 @@
+﻿@model ObraModel
+@{
+    ViewData["Title"] = "Criar Obra";
+    ContactoModel contacto = new ContactoModel();
+    int idCliente = contacto.id;
+}
+
+<div class="text-center">
+
+    <h1 class="display-4">Registar Obra</h1>
+
+</div>
+
+<form asp-controller="Obra" asp-action="CriarObra" method="post">
+
+    
+
+    <div class="mb-3">
+        <select class="form-select" aria-label="Default select example">
+            <option selected>Open this select menu</option>
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+        </select>
+        @* @Html.ValidationMessageFor(x => x.ContactoN) *@
+    </div>
+    <div class="mb-3">
+        <label for="DataInicio">Data de início</label>
+        <input type="date" asp-for="DatIni" class="form-control">
+        @* @Html.ValidationMessageFor(x => x.Cidade) *@
+    </div>
+    <div class="mb-3">
+        <label for="Cliente">Cliente</label>
+        <input type="date" asp-for="DatFim" class="form-control">
+        @* @Html.ValidationMessageFor(x => x.Cliente) *@
+    </div>
+    <div class="mb-3">
+        <label for="Descricao"></label>
+        <textarea asp-for="Descricao" class="form-control" placeholder="Insira a descrição da obra">
+
+        </textarea>
+       
+        @* @Html.ValidationMessageFor(x => x.Cliente) *@
+    </div>
+    <button type="submit" class="btn btn-primary">Registar</button>
+    <a class="btn btn-secondary" asp-controller="Obra" asp-action="Index">Voltar</a>
+</form>
