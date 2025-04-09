@@ -1,6 +1,8 @@
-﻿using AgcTelefonicaPH.Models;
+﻿using AgcTelefonicaPH.Data;
+using AgcTelefonicaPH.Models;
 using AgcTelefonicaPH.Repositorio;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AgcTelefonicaPH.Controllers
 {
@@ -8,51 +10,70 @@ namespace AgcTelefonicaPH.Controllers
     {
         private readonly IObraRepositorio _obraRepositorio;
 
-        public ObraController(IObraRepositorio obraRepositorio)
+        private readonly BancoContext _bancoContext;
+        public ObraController(IObraRepositorio obraRepositorio, BancoContext bancoContext)
         {
             _obraRepositorio = obraRepositorio;
+            _bancoContext = bancoContext;
         }
         public IActionResult Index()
         {
-            List<ObraModel> obra= _obraRepositorio.BuscarAll();
+            List<ObraModel> obras = _obraRepositorio.BuscarAll();
+
+            // Obtém todos os IDs de clientes das obras
+            var idsClientes = obras.Select(o => o.idCliente).Distinct().ToList();
+
+            // Busca os contatos correspondentes aos IDs de clientes
+            var contatos = _bancoContext.Contactos
+                .Where(c => idsClientes.Contains(c.id))
+                .ToDictionary(c => c.id, c => c.Cliente ?? "Cliente não encontrado");
+
+            ViewBag.Contatos = contatos; // Dicionário com idCliente -> Nome do Cliente
+
+            return View(obras);
+        }
+        public IActionResult CriarObra()    
+        {
+            var obra = new ObraModel();
+            ViewBag.Contatos = _bancoContext.Contactos.ToList(); // Lista de contatos do banco
             return View(obra);
         }
-        public IActionResult CriarObra()
+        public IActionResult EditarObra(int id)
         {
-            return View();
+            ObraModel obra = _obraRepositorio.ListarPorId(id);
+            ViewBag.Contatos = _bancoContext.Contactos.ToList();
+            return View(obra);
         }
-        public IActionResult EditarObra()
+        public IActionResult ApagarConfirmObra(int id)
         {
-            return View();
+            ObraModel obra = _obraRepositorio.ListarPorId(id);
+            ContactoModel contato = _obraRepositorio.ListarPorIdCliente(obra.idCliente);
+            ViewBag.NomeCliente = contato?.Cliente ?? "Cliente não encontrado"; // Nome do cliente ou mensagem padrão
+            ViewBag.Contatos = _bancoContext.Contactos.ToList(); // Mantém a lista de contatos, se necessário
+            return View(obra);
         }
-        public IActionResult ApagarConfirmObra()
+        public IActionResult Apagar(int id)
         {
-            return View();
+            bool apagado = _obraRepositorio.Apagar(id);
+            return RedirectToAction("Index");
         }
         [HttpPost]
         public IActionResult CriarObra(ObraModel obra)
         {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    _obraRepositorio.Adicionar(obra);
-                    TempData["MensagemSucesso"] = "Obra criada com sucesso";
-                    return RedirectToAction("Index");
-                }
-
-                return View(obra);
-            }
-            catch (Exception erro)
-            {
-                TempData["MensagemErro"] = $"Erro ao criar a obra, tente novamente, detalhe do erro: {erro.Message}";
-                return RedirectToAction("Index");
-            }
+            
+            _obraRepositorio.Adicionar(obra);
+            TempData["MensagemSucesso"] = "Obra criada com sucesso";
+            return RedirectToAction("Index");
+                
+            
+            
         }
         [HttpPost]
-        public IActionResult CriarObra(int itemSelecionado)
+        public IActionResult EditarObra(ObraModel obra)
         {
-            return View();
+            _obraRepositorio.Atualizar(obra);
+            TempData["MensagemSucesso"] = "Contato atualizado com sucesso";
+            return RedirectToAction("Index");
         }
     }
 }

@@ -30,11 +30,19 @@
                         <td>@obra.Descricao</td>
                         <td>@obra.DatIni</td>
                         <td>@obra.DatFim</td>
-                        <td>@obra.idCliente</td>
+                        <td>
+                            @{
+                                var contatos = ViewBag.Contatos as Dictionary<int, string>;
+                                string nomeCliente = contatos != null && contatos.ContainsKey(obra.idCliente)
+                                ? contatos[obra.idCliente]
+                                : "Cliente não encontrado";
+                            }
+                            @nomeCliente
+                        </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                <a role="button" class="btn btn-secondary" asp-route-id="@obra.id" asp-controller="Obra" asp-action="EditarContacto">Editar</a>
-                                <a role="button" class="btn btn-danger" asp-route-id="@obra.id" asp-controller="Obra" asp-action="ApagarConfirm">Apagar</a>
+                                <a role="button" class="btn btn-secondary" asp-route-id="@obra.id" asp-controller="Obra" asp-action="EditarObra">Editar</a>
+                                <a role="button" class="btn btn-danger" asp-route-id="@obra.id" asp-controller="Obra" asp-action="ApagarConfirmObra">Apagar</a>
                             </div>
                         </td>
                     </tr>

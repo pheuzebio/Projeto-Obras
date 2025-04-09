@@ -1,5 +1,48 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ObraModel
 @{
+    ViewData["Title"] = "Criar Obra";
+    ContactoModel contacto = new ContactoModel();
+
 }
+
+<div class="text-center">
+
+    <h1 class="display-4 mb-5">Registar Obra</h1>
+
+</div>
+
+<form asp-controller="Obra" asp-action="EditarObra" method="post">
+
+
+
+    <div class="mb-3">
+        <select asp-for="idCliente" class="form-select" aria-label="Default select example">
+            <option selected value="@contacto.id">@contacto.Cliente</option>
+            @foreach (var contacto in ViewBag.Contatos as List<ContactoModel>)
+            {
+                <option value="@contacto.id">@contacto.Cliente</option>
+            }
+        </select>
+        @* @Html.ValidationMessageFor(x => x.ContactoN) *@
+    </div>
+    <div class="mb-3 col-6">
+        <label for="DataInicio">Data de início</label>
+        <input type="date" asp-for="DatIni" class="form-control">
+        @* @Html.ValidationMessageFor(x => x.Cidade) *@
+    </div>
+    <div class="mb-3 col-6">
+        <label for="DataFinal">Data final</label>
+        <input type="date" asp-for="DatFim" class="form-control">
+        @* @Html.ValidationMessageFor(x => x.Cliente) *@
+    </div>
+    <div class="mb-3">
+        <label for="Descricao">Descrição</label>
+        <textarea asp-for="Descricao" class="form-control" placeholder="Insira a descrição da obra">
+
+        </textarea>
+
+        @* @Html.ValidationMessageFor(x => x.Cliente) *@
+    </div>
+    <button type="submit" class="btn btn-primary">Registar</button>
+    <a class="btn btn-secondary" asp-controller="Obra" asp-action="Index">Voltar</a>
+</form>

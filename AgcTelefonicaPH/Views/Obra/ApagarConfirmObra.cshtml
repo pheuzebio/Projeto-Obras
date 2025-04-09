@@ -1,5 +1,20 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ObraModel
 @{
+    ViewData["Title"] = "Confirmação apagar Obra";
+    ContactoModel contato = new ContactoModel();
 }
+
+<div class="text-center">
+    <h3>Deseja apagar a obra do cliente @ViewBag.NomeCliente, cuja descrição é "@Model.Descricao?"</h3>
+</div>
+<br />
+<div class="text-center">
+    <a class="btn btn-primary" role="button" asp-controller="Obra" asp-action="Index">Cancelar</a>
+    <a class="btn btn-danger" role="button" asp-controller="Obra" asp-action="Apagar" asp-route-id="@Model.id">Apagar</a>
+</div>
+
+
+
+
+
+

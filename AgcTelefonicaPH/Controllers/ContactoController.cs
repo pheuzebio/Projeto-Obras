@@ -20,6 +20,7 @@ namespace AgcTelefonicaPH.Controllers
 
         public IActionResult CriarContacto()
         {
+
             return View();
         }
 
