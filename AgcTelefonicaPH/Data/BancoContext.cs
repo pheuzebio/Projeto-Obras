@@ -11,6 +11,8 @@ namespace AgcTelefonicaPH.Data
 
         public DbSet<ContactoModel> Contactos { get; set; }
 
+        public DbSet<ObraModel> Obras { get; set; }
+
 
     }
 }
