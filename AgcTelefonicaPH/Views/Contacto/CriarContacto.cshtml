@@ -9,23 +9,27 @@
    
 </div>
 
-<form asp-controller="Contacto" asp-action="CriarContacto" method="post">
+<form asp-controller="Contacto" asp-action="CriarContacto" enctype="multipart/form-data" method="post">
 
+    <div class="mb-3">
+        <label for="imagem">Imagem</label>
+        <input type="file" asp-for="Imagem" name="imagem" class="form-control" />
+    </div>
     <div class="mb-3">
         <label for="Cliente">Cliente</label>
         <input type="text" asp-for="Cliente" class="form-control" placeholder="Insira o nome do cliente">
-        @Html.ValidationMessageFor(x => x.Cliente)
+        
     </div>
 
     <div class="mb-3">
         <label for="Contacto">Contacto</label>
         <input type="text" asp-for="ContactoN" class="form-control" placeholder="Insira o seu contacto">
-        @Html.ValidationMessageFor(x => x.ContactoN)
+        
     </div>
     <div class="mb-3">
         <label for="Cidade">Cidade</label>
         <input type="text" asp-for="Cidade" class="form-control" placeholder="Insira a sua cidade">
-        @Html.ValidationMessageFor(x => x.Cidade)
+        
     </div>
    
     <button type="submit" class="btn btn-primary">Registar</button>

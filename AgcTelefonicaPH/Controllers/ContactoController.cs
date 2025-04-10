@@ -62,44 +62,22 @@ namespace AgcTelefonicaPH.Controllers
         }
 
         [HttpPost]
-        public IActionResult CriarContacto(ContactoModel contacto) 
+        public IActionResult CriarContacto(ContactoModel contacto, IFormFile imagem) 
         {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    _contactoRepositorio.Adicionar(contacto);
+           
+                    _contactoRepositorio.Adicionar(contacto, imagem);
                     TempData["MensagemSucesso"] = "Contato registado com sucesso";
                     return RedirectToAction("Index");
-                }
-
-                return View(contacto);
-            }
-            catch (Exception erro)
-            {
-                TempData["MensagemErro"] = $"Erro ao registar o contato, tente novamente, detalhe do erro: {erro.Message}";
-                return RedirectToAction("Index");
-            }
+                
         }
 
         [HttpPost]
-        public IActionResult EditarContacto(ContactoModel contacto)
+        public IActionResult EditarContacto(ContactoModel contacto, IFormFile imagem)
         {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    _contactoRepositorio.Atualizar(contacto);
+                    _contactoRepositorio.Atualizar(contacto, imagem);
                     TempData["MensagemSucesso"] = "Contato atualizado com sucesso";
                     return RedirectToAction("Index");
-                }
-                return View("EditarContacto", contacto);
-            }
-            catch (Exception erro)
-            {
-                TempData["MensagemErro"] = $"Erro ao atualizar o contato, tente novamente, detalhe do erro: {erro.Message}";
-                return RedirectToAction("Index");
-            }
+               
         }
     }
 }

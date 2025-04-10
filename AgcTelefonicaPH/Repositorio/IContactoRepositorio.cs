@@ -6,8 +6,8 @@ namespace AgcTelefonicaPH.Repositorio
     {
         ContactoModel ListarPorId(int id);
         List<ContactoModel> BuscarAll();
-        ContactoModel Adicionar(ContactoModel contacto);
-        ContactoModel Atualizar(ContactoModel contacto);
+        ContactoModel Adicionar(ContactoModel contacto, IFormFile imagem);
+        ContactoModel Atualizar(ContactoModel contacto, IFormFile imagem);
         bool Apagar(int id);
     }
 }

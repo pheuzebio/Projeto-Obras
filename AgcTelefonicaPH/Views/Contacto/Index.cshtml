@@ -37,6 +37,7 @@
                 <th scope="col">Cliente</th>
                 <th scope="col">Contacto</th>
                 <th scope="col">Cidade</th>
+                <th scope="col">Imagem</th>
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -45,11 +46,23 @@
             {
                 foreach (ContactoModel contacto in Model)
                 {
-                    <tr>
+                    <tr class="">
                         <th scope="row">@contacto.id</th>
                         <td>@contacto.Cliente</td>
                         <td>@contacto.ContactoN</td>
                         <td>@contacto.Cidade</td>
+                        <td>
+                            @if (contacto.Imagem != null && contacto.Imagem.Length > 0)
+                            {
+                                <img src="data:image/jpeg;base64,@Convert.ToBase64String(contacto.Imagem)"
+                                     alt="Imagem de @contacto.Cliente"
+                                     style="max-width: 100px; max-height: 100px;" />
+                            }
+                            else
+                            {
+                                <span>Sem imagem</span>
+                            }
+                        </td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Basic example">
                                 <a role="button" class="btn btn-secondary" asp-route-id="@contacto.id" asp-controller="Contacto" asp-action="EditarContacto">Editar</a>

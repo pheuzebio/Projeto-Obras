@@ -19,22 +19,39 @@ namespace AgcTelefonicaPH.Repositorio
         {
             return _bancoContext.Contactos.ToList();
         }
-        public ContactoModel Adicionar(ContactoModel contacto)
+        public ContactoModel Adicionar(ContactoModel contacto, IFormFile imagem)
         {
+            if (imagem != null && imagem.Length > 0)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    imagem.CopyTo(ms);
+                    contacto.Imagem = ms.ToArray(); // Converte a imagem em byte[]
+                }
+            }
             _bancoContext.Contactos.Add(contacto);
             _bancoContext.SaveChanges();   
             return contacto;
         }
 
-        public ContactoModel Atualizar(ContactoModel contacto)
+        public ContactoModel Atualizar(ContactoModel contacto, IFormFile imagem)
         {
             ContactoModel contactoDB = ListarPorId(contacto.id);
+            if (imagem != null && imagem.Length > 0)
+            {
+                using (var ms = new MemoryStream())
+                {
+                    imagem.CopyTo(ms);
+                    contacto.Imagem = ms.ToArray();
+                }
+            }
 
             if (contactoDB == null) throw new System.Exception("Ocorreu um erro ao atualizar o contato");
 
             contactoDB.Cliente = contacto.Cliente;
             contactoDB.ContactoN = contacto.ContactoN;
             contactoDB.Cidade = contacto.Cidade;
+            contactoDB.Imagem = contacto.Imagem;
 
             _bancoContext.Contactos.Update(contactoDB);
             _bancoContext.SaveChanges();
