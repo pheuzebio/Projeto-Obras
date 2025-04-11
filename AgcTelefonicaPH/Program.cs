@@ -1,6 +1,8 @@
 using AgcTelefonicaPH.Data;
 using AgcTelefonicaPH.Repositorio;
 using Microsoft.EntityFrameworkCore;
+//para o Websockets
+using AgcTelefonicaPH.Hubs;
 
 namespace AgcTelefonicaPH
 {
@@ -16,7 +18,8 @@ namespace AgcTelefonicaPH
                 .AddDbContext<BancoContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
             builder.Services.AddScoped<IContactoRepositorio, ContactoRepositorio>();
             builder.Services.AddScoped<IObraRepositorio, ObraRepositorio>();
-
+            //SignalR
+            builder.Services.AddSignalR();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -25,18 +28,19 @@ namespace AgcTelefonicaPH
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseRouting();
-
             app.UseAuthorization();
+            app.MapHub<ChatHub>("/chatHub");
 
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
-                .WithStaticAssets();
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }

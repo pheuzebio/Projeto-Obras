@@ -7,3 +7,98 @@
     <h1 class="display-4">Bem vindo, @Model.Nome</h1>
     <p>Agencia Telefonica PH</p>
 </div>
+<section>
+    <div class="container py-5 ">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-4">
+                <div class="card" id="chat1" style="border-radius: 15px;">
+                    <!-- Cabeçalho do chat -->
+                    <div class="card-header d-flex justify-content-between align-items-center p-3 bg-info  text-white border-bottom-0"
+                         style="border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                        <p class="mb-0 fw-bold">Chat</p>
+                    </div>
+                    <!-- Corpo do chat -->
+                    <div class="card-body" style="max-height: 400px; overflow-y: auto; min-height:250px">
+                        <div id="messagesList">
+                            <!-- Mensagens serão adicionadas dinamicamente aqui -->
+                        </div>
+                    </div>
+                    <!-- Rodapé com input -->
+                    <div class="card-footer">
+                        <div class="form-outline mb-2">
+                            <input type="text" id="userInput" class="form-control bg-body-tertiary" placeholder="Seu nome" />
+                        </div>
+                        <div class="form-outline">
+                            <textarea class="form-control bg-body-tertiary" id="messageInput" rows="2" placeholder="Digite sua mensagem"></textarea>
+                        </div>
+                        <button class="btn btn-primary mt-2" onclick="sendMessage()">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.0/signalr.min.js"></script>
+<script>
+    // Inicializa a conexão com o Hub
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/chatHub")
+        .build();
+
+    // Recebe mensagens do servidor
+    connection.on("broadcastMessage", (user, message) => {
+        const userName = document.getElementById("userInput").value || "Eu";
+        const isCurrentUser = user === userName;
+
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `d-flex flex-row mb-4 ${isCurrentUser ? "justify-content-end" : "justify-content-start"}`;
+
+        const contentDiv = document.createElement("div");
+        contentDiv.className = `p-3 ${isCurrentUser ? "me-3 border bg-body-tertiary" : "ms-3"}`;
+        contentDiv.style.borderRadius = "15px";
+        if (!isCurrentUser) {
+            contentDiv.style.backgroundColor = "rgba(57, 192, 237, 0.2)";
+        }
+
+        const userSpan = document.createElement("span");
+        userSpan.className = "small fw-bold d-block mb-1";
+        userSpan.textContent = user;
+
+        const messageP = document.createElement("p");
+        messageP.className = "small mb-0";
+        messageP.textContent = message;
+
+        contentDiv.appendChild(userSpan);
+        contentDiv.appendChild(messageP);
+        messageDiv.appendChild(contentDiv);
+
+        const messagesList = document.getElementById("messagesList");
+        messagesList.appendChild(messageDiv);
+        messagesList.scrollTop = messagesList.scrollHeight; // Auto-scroll para a última mensagem
+    });
+
+    // Inicia a conexão
+    connection.start().then(() => {
+        console.log("Conexão com o SignalR estabelecida!");
+        // Enviar mensagem ao pressionar Enter
+        document.getElementById("messageInput").addEventListener("keypress", (e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    }).catch(err => console.error("Erro ao conectar ao SignalR:", err));
+
+    // Função para enviar mensagens
+    function sendMessage() {
+        const user = document.getElementById("userInput").value;
+        const message = document.getElementById("messageInput").value.trim();
+        if (user && message) {
+            connection.invoke("sendMessage", user, message)
+                .catch(err => console.error("Erro ao enviar mensagem:", err));
+            document.getElementById("messageInput").value = "";
+        }
+    }
+</script>

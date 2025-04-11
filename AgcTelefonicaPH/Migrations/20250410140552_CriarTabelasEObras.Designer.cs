@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgcTelefonicaPH.Migrations
 {
     [DbContext(typeof(BancoContext))]
-    [Migration("20250409115056_CriarTabelaContactos")]
-    partial class CriarTabelaContactos
+    [Migration("20250410140552_CriarTabelasEObras")]
+    partial class CriarTabelasEObras
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,9 +44,54 @@ namespace AgcTelefonicaPH.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<byte[]>("Imagem")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.HasKey("id");
 
                     b.ToTable("Contactos");
+                });
+
+            modelBuilder.Entity("AgcTelefonicaPH.Models.ObraModel", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("DatFim")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DatIni")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("idCliente")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("idCliente");
+
+                    b.ToTable("Obras");
+                });
+
+            modelBuilder.Entity("AgcTelefonicaPH.Models.ObraModel", b =>
+                {
+                    b.HasOne("AgcTelefonicaPH.Models.ContactoModel", "Contacto")
+                        .WithMany()
+                        .HasForeignKey("idCliente")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contacto");
                 });
 #pragma warning restore 612, 618
         }

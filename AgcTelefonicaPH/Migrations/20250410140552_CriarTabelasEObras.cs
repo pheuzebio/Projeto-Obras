@@ -5,11 +5,27 @@
 namespace AgcTelefonicaPH.Migrations
 {
     /// <inheritdoc />
-    public partial class CriarTabelaObras : Migration
+    public partial class CriarTabelasEObras : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Contactos",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Cliente = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ContactoN = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Cidade = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Imagem = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contactos", x => x.id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Obras",
                 columns: table => new
@@ -43,6 +59,9 @@ namespace AgcTelefonicaPH.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Obras");
+
+            migrationBuilder.DropTable(
+                name: "Contactos");
         }
     }
 }
